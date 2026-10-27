@@ -86,6 +86,19 @@ final class ModelRangeTests: XCTestCase {
         )
     }
 
+    func testTodayIncludesOnlyCurrentUTCDay() throws {
+        let range = try dates(.today, at: "2026-10-08T12:00:00Z")
+        XCTAssertEqual(range, "2026-10-08"..<"2026-10-09")
+        XCTAssertFalse(range.contains("2026-10-07"))
+        XCTAssertFalse(range.contains("2026-10-09"))
+        XCTAssertEqual(ModelRange.today.label, "Today")
+        XCTAssertEqual(ModelRange(rawValue: "today"), .today)
+    }
+
+    func testTodayUsesUTCAndCrossesYearBoundary() throws {
+        XCTAssertEqual(try dates(.today, at: "2027-01-01T00:30:00+01:00"), "2026-12-31"..<"2027-01-01")
+    }
+
     func testThisMonthIncludesOnlyCurrentMonth() throws {
         let range = try dates(.thisMonth, at: "2026-10-08T12:00:00Z")
         XCTAssertEqual(range, "2026-10-01"..<"2026-11-01")
@@ -128,7 +141,7 @@ final class ModelRangeTests: XCTestCase {
     }
 
     func testPickerOrderAndStableIdentifiers() throws {
-        XCTAssertEqual(ModelRange.allCases, [.thisMonth, .last28, .thisWeek, .lastWeek])
+        XCTAssertEqual(ModelRange.allCases, [.thisMonth, .last28, .thisWeek, .lastWeek, .today])
         for range in ModelRange.allCases {
             XCTAssertEqual(range.id, range.rawValue)
             XCTAssertEqual(try JSONDecoder().decode(ModelRange.self, from: JSONEncoder().encode(range)), range)

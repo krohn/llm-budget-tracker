@@ -21,6 +21,7 @@ enum ModelRange: String, CaseIterable, Codable, Identifiable {
     case last28
     case thisWeek
     case lastWeek
+    case today
 
     var id: String { rawValue }
 
@@ -30,6 +31,7 @@ enum ModelRange: String, CaseIterable, Codable, Identifiable {
         case .last28: return "Last 28 days"
         case .thisWeek: return "This week"
         case .lastWeek: return "Last week"
+        case .today: return "Today"
         }
     }
 
@@ -57,6 +59,9 @@ enum ModelRange: String, CaseIterable, Codable, Identifiable {
             let interval = calendar.dateInterval(of: .weekOfYear, for: today)
             end = interval?.start
             start = end.flatMap { calendar.date(byAdding: .day, value: -7, to: $0) }
+        case .today:
+            start = today
+            end = calendar.date(byAdding: .day, value: 1, to: today)
         }
         guard let start, let end else { return nil }
 

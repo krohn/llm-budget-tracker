@@ -35,11 +35,14 @@ enum PacingStatus {
 // MARK: - PacingStatus + Color
 
 extension PacingStatus {
+    /// Muted red for the over-budget state; `.systemRed` glows too harshly in the menu bar.
+    private static let overPaceRed = NSColor(srgbRed: 0.80, green: 0.33, blue: 0.30, alpha: 1)
+
     var color: Color {
         switch self {
         case .underPace, .onTrack: return .green
         case .nearLimit:           return .orange
-        case .overPace:            return .red
+        case .overPace:            return Color(nsColor: Self.overPaceRed)
         case .unknown:             return Color(nsColor: .systemGray)
         }
     }
@@ -48,7 +51,7 @@ extension PacingStatus {
         switch self {
         case .underPace, .onTrack: return .systemGreen
         case .nearLimit:           return .systemOrange
-        case .overPace:            return .systemRed
+        case .overPace:            return Self.overPaceRed
         case .unknown:             return .systemGray
         }
     }

@@ -125,7 +125,7 @@ struct BudgetCard: View {
 
     private var fallbackStatusColor: Color {
         let pct = info.maxBudget.map { info.spend / $0 } ?? 0
-        return pct > 0.9 ? .red : pct > 0.75 ? .orange : .green
+        return pct > 0.9 ? PacingStatus.overPace.color : pct > 0.75 ? .orange : .green
     }
 
     private var remainingBudget: Double? {

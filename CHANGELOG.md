@@ -9,7 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - The effective budget limit is now resolved across key, team member, team and user levels; the lowest limit wins.
 - Usage is shown even when no budget limit is configured.
-- New "This week" and "Last week" ranges in the per-model spend breakdown.
+- New "Today", "This week" and "Last week" ranges in the per-model spend breakdown.
 - New "Quit App" button in the popover.
 
 ### For users
@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **"This week" and "Last week"** ranges in the per-model spend breakdown. Weeks always run Monday to Sunday,
   independent of your locale; "Last week" is the previous calendar week. All ranges are based on UTC, like the
   daily API data.
+- **"Today"** range in the per-model spend breakdown, showing the current UTC day.
 - **Budget limits from all levels:** besides the user (`/v2/user/info`) and team-member (`/team/{id}/members/me`)
   budgets, the app now also considers the key's own budget (`/key/info`) and the team budget (`/team/info`).
   If several limits are set, the lowest one is used, together with the spend, reset time and duration of that level.
@@ -37,6 +38,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   "Spend / Tokens / Requests" control and shows a single chevron instead of two.
 - **VoiceOver:** without a budget limit, the menu bar item is announced as "Used …, no budget limit" instead of
   "No budget available".
+- **Softer red for "Likely to exceed":** the menu bar bar and budget card use a muted red instead of the bright system
+  red.
 
 #### Fixed
 
