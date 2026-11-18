@@ -2,6 +2,7 @@ import SwiftUI
 
 struct SettingsView: View {
     @Environment(BudgetViewModel.self) private var viewModel
+    @Environment(UpdateChecker.self) private var updateChecker
     @State private var proxyURL: String = ""
     @State private var newAPIKey: String = ""
     @State private var connectionStatus: ConnectionStatus = .idle
@@ -29,6 +30,7 @@ struct SettingsView: View {
             usageDataSection
             displaySection(vm: $vm)
             refreshSection(vm: $vm)
+            updatesSection
             if diagnosticsEnabledForBuild && devModeUnlocked {
                 advancedSection
             }
@@ -209,6 +211,62 @@ struct SettingsView: View {
                 .foregroundStyle(.secondary)
         } header: {
             Text("Usage Data")
+        }
+    }
+
+    // MARK: - Updates Section
+
+    private var updatesSection: some View {
+        @Bindable var checker = updateChecker
+        return Section {
+            Toggle("Check for updates daily", isOn: $checker.autoCheckEnabled)
+            Text("Looks for a newer release on git.krohn.io once a day.")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            HStack(spacing: 8) {
+                updateStatusView
+                Spacer()
+                Button("Check Now") {
+                    Task { await updateChecker.checkNow() }
+                }
+                .disabled(updateChecker.status == .checking)
+            }
+        } header: {
+            Text("Updates")
+        }
+    }
+
+    @ViewBuilder
+    private var updateStatusView: some View {
+        switch updateChecker.status {
+        case .idle:
+            EmptyView()
+        case .checking:
+            HStack(spacing: 6) {
+                ProgressView().controlSize(.small)
+                Text("Checking for updates...")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        case .upToDate:
+            Label("You're up to date (v\(updateChecker.currentVersion)).", systemImage: "checkmark.circle.fill")
+                .font(.caption)
+                .foregroundStyle(.green)
+        case .updateAvailable(let version, let url):
+            HStack(spacing: 8) {
+                Label("Version \(version) is available.", systemImage: "arrow.down.circle.fill")
+                    .font(.caption)
+                    .foregroundStyle(Color.accentColor)
+                Button("Open Download Page") {
+                    NSWorkspace.shared.open(url)
+                }
+                .buttonStyle(.borderedProminent)
+            }
+        case .failed(let message):
+            Label(message, systemImage: "xmark.circle.fill")
+                .font(.caption)
+                .foregroundStyle(.red)
         }
     }
 

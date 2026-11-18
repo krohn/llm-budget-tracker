@@ -28,8 +28,8 @@ targets:
         INFOPLIST_KEY_LSUIElement: YES
         INFOPLIST_KEY_NSHumanReadableDescription: "LLM Budget Tracker"
         INFOPLIST_KEY_CFBundleDisplayName: LLM Budget Tracker
-        MARKETING_VERSION: "0.1.0"
-        CURRENT_PROJECT_VERSION: "13"
+        MARKETING_VERSION: "0.1.1"
+        CURRENT_PROJECT_VERSION: "14"
         CODE_SIGN_STYLE: Automatic
         ENABLE_HARDENED_RUNTIME: YES
       configs:
@@ -52,6 +52,7 @@ targets:
       - path: LLMBudgetTracker/Models/TeamInfo.swift
       - path: LLMBudgetTracker/Models/SpendLog.swift
       - path: LLMBudgetTracker/Models/ChartSelection.swift
+      - path: LLMBudgetTracker/Models/AppUpdate.swift
     settings:
       base:
         SWIFT_VERSION: "6.0"

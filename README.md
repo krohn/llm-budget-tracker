@@ -21,6 +21,10 @@ LiteLLM proxy and displays daily activity charts.
   and duration come from the same level. On equal limits, the level listed first wins. Levels without a limit or without
   access are skipped. In the Developer Mode request log, `limits_found` shows which limits were found.
 - If no limit is found, the user data (spend) is shown.
+- Checks for a newer release, on demand via `Check Now` in Settings and, if `Check for updates daily` is on
+  (default), at launch and once a day. A newer version is shown in Settings and in the popover footer, with a link to
+  its release page. The check asks the public GitLab API of git.krohn.io for the latest release tag; nothing else is
+  sent.
 
 ## Install the app
 

@@ -4,6 +4,7 @@ import SwiftUI
 @MainActor
 final class StatusBarController {
     let viewModel = BudgetViewModel()
+    let updateChecker = UpdateChecker()
 
     private let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
     private let popover = NSPopover()
@@ -17,6 +18,7 @@ final class StatusBarController {
         setupPopover()
         setupButton()
         observeViewModel()
+        updateChecker.startAutoCheck()
     }
 
     // MARK: - Setup
@@ -28,7 +30,9 @@ final class StatusBarController {
         let controller = NSHostingController(
             rootView: PopoverView(closePopover: { [weak self] in
                 self?.popover.performClose(nil)
-            }).environment(viewModel)
+            })
+            .environment(viewModel)
+            .environment(updateChecker)
         )
         hostingViewController = controller
         popover.contentViewController = controller
@@ -114,6 +118,7 @@ final class StatusBarController {
             _ = viewModel.appState
             _ = viewModel.isLoading
             _ = viewModel.spendLogs
+            _ = updateChecker.status
         } onChange: { [weak self] in
             Task { @MainActor [weak self] in
                 self?.updateImage()

@@ -3,6 +3,7 @@ import SwiftUI
 struct PopoverView: View {
     var closePopover: () -> Void = {}
     @Environment(BudgetViewModel.self) private var viewModel
+    @Environment(UpdateChecker.self) private var updateChecker
     @Environment(\.openSettings) private var openSettings
 
     @State private var isRefreshing = false
@@ -204,6 +205,24 @@ struct PopoverView: View {
 
     private var footer: some View {
         VStack(spacing: 4) {
+            if case .updateAvailable(let version, let url) = updateChecker.status {
+                HStack(spacing: 6) {
+                    Image(systemName: "arrow.down.circle.fill")
+                        .foregroundStyle(Color.accentColor)
+                        .accessibilityHidden(true)
+                    Text("Version \(version) is available.")
+                    Button("Download") {
+                        closePopover()
+                        NSWorkspace.shared.open(url)
+                    }
+                    .font(.caption.weight(.medium))
+                    .buttonStyle(.plain)
+                    .foregroundStyle(Color.accentColor)
+                    .accessibilityHint("Opens the release page in your browser")
+                    Spacer()
+                }
+                .font(.caption)
+            }
             if let error = refreshError {
                 HStack {
                     Image(systemName: "exclamationmark.triangle.fill")

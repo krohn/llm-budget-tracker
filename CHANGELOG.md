@@ -5,6 +5,31 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.1.1] - 2026-11-18
+
+### For users
+
+#### Added
+
+- **Update check:** Settings → Updates has a `Check Now` button and a `Check for updates daily` toggle (on by
+  default; checks at launch and once a day). If a newer version exists, Settings and the popover footer show it with a
+  link to its release page.
+
+### For developers
+
+#### Added
+
+- **`AppUpdate.swift`:** `AppVersion` (parses `X.Y.Z` and `vX.Y.Z`, numeric comparison), `LatestRelease` decoding and
+  `ReleaseFeed` (latest-release endpoint, release page URL, 24 h due check, status calculation).
+- **`UpdateChecker`:** observable service owned by `StatusBarController`; queries
+  `/api/v4/projects/karsten%2Fllm-budget-tracker/releases/permalink/latest` anonymously. A failed check does not count
+  as a check, so the next hourly poll retries.
+- **`UpdateCheckTests`** for version parsing and comparison, status, release page URL, due check and decoding.
+
+#### Changed
+
+- The project on git.krohn.io is now public, so the update check needs no token.
+
 ## [0.1.0] - 2026-11-18
 
 ### Highlights
@@ -123,5 +148,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   release job instead and are no longer signed with a Developer ID or notarized.
 - **Homebrew install** from `ilja82/tap`; that cask ships the upstream app without these changes.
 
-[Unreleased]: https://git.krohn.io/karsten/llm-budget-tracker/-/compare/v0.1.0...main
+[Unreleased]: https://git.krohn.io/karsten/llm-budget-tracker/-/compare/v0.1.1...main
+[0.1.1]: https://git.krohn.io/karsten/llm-budget-tracker/-/compare/v0.1.0...v0.1.1
 [0.1.0]: https://git.krohn.io/karsten/llm-budget-tracker/-/compare/v0.0.8...v0.1.0
