@@ -4,6 +4,7 @@ workflow:
     - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
       when: never
     - if: $CI_COMMIT_BRANCH
+    - if: $CI_COMMIT_TAG
 
 variables:
   SCHEME: LLMBudgetTracker
@@ -14,6 +15,7 @@ variables:
 stages:
   - lint
   - test
+  - release
 
 # Requires a macOS shell runner with Xcode and Homebrew, registered with the tag "macos".
 default:
@@ -42,3 +44,13 @@ test:
       -configuration Debug
       -destination "platform=macOS"
       CODE_SIGNING_ALLOWED=NO
+
+release:
+  stage: release
+  rules:
+    - if: $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/
+  interruptible: false
+  script:
+    - command -v xcodegen || brew install xcodegen
+    - command -v swiftlint || brew install swiftlint
+    - ./scripts/publish-release.sh

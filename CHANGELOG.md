@@ -20,6 +20,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 #### Added
 
+- **DMG download** on the [releases page](https://git.krohn.io/karsten/llm-budget-tracker/-/releases). The app is not
+  notarized; allow the first launch under System Settings → Privacy & Security → `Open Anyway`.
 - **Quit App** button next to "Settings" in the popover header.
 - **"This week" and "Last week"** ranges in the per-model spend breakdown. Weeks always run Monday to Sunday,
   independent of your locale; "Last week" is the previous calendar week. All ranges are based on UTC, like the
@@ -87,6 +89,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **GitLab CI (`.gitlab-ci.yml`)** with a `lint` job (`swiftlint lint --strict`) and a `test` job (`xcodegen generate`,
   then `xcodebuild test` without code signing). It runs on pushes and merge requests on a macOS shell runner tagged
   `macos`.
+- **Release job:** pushing a tag `vX.Y.Z` runs `scripts/publish-release.sh` in CI. It builds the app, packages it as a
+  DMG, uploads it to the generic package registry and creates a GitLab release with the version's CHANGELOG section as
+  notes. The tag must match `MARKETING_VERSION` in `project.yml`.
 
 #### Changed
 
@@ -114,8 +119,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 #### Removed
 
-- **GitHub Actions workflows** (build, PR checks, CodeQL) and the Dependabot config. Releases are no longer built
-  automatically; `scripts/release.sh` only creates and pushes the version tag.
+- **GitHub Actions workflows** (build, PR checks, CodeQL) and the Dependabot config. Releases are built by the GitLab
+  release job instead and are no longer signed with a Developer ID or notarized.
 - **Homebrew install** from `ilja82/tap`; that cask ships the upstream app without these changes.
 
 [Unreleased]: https://git.krohn.io/karsten/llm-budget-tracker/-/compare/v0.1.0...main

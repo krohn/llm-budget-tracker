@@ -44,4 +44,4 @@ fi
 git tag "$TAG"
 git push origin "$TAG"
 
-echo "Done. GitHub Actions will now build and publish the $TAG release."
+echo "Done. GitLab CI will now build the DMG and publish the $TAG release."

@@ -24,7 +24,18 @@ LiteLLM proxy and displays daily activity charts.
 
 ## Install the app
 
-There is no prebuilt release of this version yet. Build the app from source, see [Build from source](#build-from-source).
+Download the DMG of the latest version from the
+[releases page](https://git.krohn.io/karsten/llm-budget-tracker/-/releases), open it and drag `LLMBudgetTracker.app`
+into `Applications`.
+
+The app is not notarized, so macOS blocks the first launch. Allow it once under System Settings → Privacy & Security →
+`Open Anyway`, or remove the quarantine flag:
+
+```bash
+xattr -dr com.apple.quarantine /Applications/LLMBudgetTracker.app
+```
+
+You can also build the app yourself, see [Build from source](#build-from-source).
 
 ## Run the app
 
@@ -77,6 +88,12 @@ DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild \
 
 GitLab CI (`.gitlab-ci.yml`) runs SwiftLint and the unit tests on every push and merge request. The jobs need a macOS
 shell runner with Xcode, tagged `macos`.
+
+## Release
+
+Bump `MARKETING_VERSION` in `project.yml`, add the version's section to `CHANGELOG.md`, then run
+`./scripts/release.sh` on `main`. It pushes the tag `vX.Y.Z`; the `release` CI job then builds the app, packages it as
+a DMG, uploads it to the package registry and creates the GitLab release with the version's CHANGELOG section as notes.
 
 ## License
 
