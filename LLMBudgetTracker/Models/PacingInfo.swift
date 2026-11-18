@@ -47,6 +47,31 @@ extension PacingStatus {
         }
     }
 
+    /// Text variant of `color`: darker in light mode, lighter in dark mode, so colored
+    /// labels stay readable on the status-tinted card backgrounds.
+    var textColor: Color {
+        Color(nsColor: textNSColor)
+    }
+
+    var textNSColor: NSColor {
+        let (light, dark): (NSColor, NSColor) = switch self {
+        case .underPace, .onTrack:
+            (NSColor(srgbRed: 0.10, green: 0.50, blue: 0.20, alpha: 1),
+             NSColor(srgbRed: 0.42, green: 0.86, blue: 0.52, alpha: 1))
+        case .nearLimit:
+            (NSColor(srgbRed: 0.70, green: 0.36, blue: 0.00, alpha: 1),
+             NSColor(srgbRed: 1.00, green: 0.70, blue: 0.34, alpha: 1))
+        case .overPace:
+            (NSColor(srgbRed: 0.70, green: 0.20, blue: 0.18, alpha: 1),
+             NSColor(srgbRed: 1.00, green: 0.55, blue: 0.51, alpha: 1))
+        case .unknown:
+            (.secondaryLabelColor, .secondaryLabelColor)
+        }
+        return NSColor(name: nil) { appearance in
+            appearance.bestMatch(from: [.aqua, .darkAqua]) == .darkAqua ? dark : light
+        }
+    }
+
     var nsColor: NSColor {
         switch self {
         case .underPace, .onTrack: return .systemGreen

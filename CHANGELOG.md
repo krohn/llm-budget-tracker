@@ -9,7 +9,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - The effective budget limit is now resolved across key, team member, team and user levels; the lowest limit wins.
 - Usage is shown even when no budget limit is configured.
-- New "Today", "This week" and "Last week" ranges in the per-model spend breakdown.
+- New "Today", "Yesterday", "This week", "Last week" and "Last month" ranges in the per-model spend breakdown,
+  chosen from a dropdown.
+- Menu bar pill redesigned as a dark capsule with a colored progress segment.
 - New "Quit App" button in the popover.
 
 ### For users
@@ -21,6 +23,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   independent of your locale; "Last week" is the previous calendar week. All ranges are based on UTC, like the
   daily API data.
 - **"Today"** range in the per-model spend breakdown, showing the current UTC day.
+- **"Yesterday"** range in the per-model spend breakdown, showing the previous UTC day.
+- **"Last month"** range in the per-model spend breakdown, showing the previous calendar month. It replaces
+  "Last 28 days"; if that range was selected, the breakdown falls back to "This month".
 - **Budget limits from all levels:** besides the user (`/v2/user/info`) and team-member (`/team/{id}/members/me`)
   budgets, the app now also considers the key's own budget (`/key/info`) and the team budget (`/team/info`).
   If several limits are set, the lowest one is used, together with the spend, reset time and duration of that level.
@@ -30,6 +35,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 #### Changed
 
+- **Range dropdown:** the per-model spend breakdown picks its range from a dropdown (like "All Models") instead of
+  segmented tabs, grouped into days, weeks and months.
+- **Menu bar pill:** dark capsule with an inner segment tinted in the pacing color; the solid part shows the budget
+  used.
+- **Per-model breakdown layout:** each model name sits directly above its bar, with more space between models.
+- **Better readability in light and dark mode:** colored text (remaining budget, status pill, "Optimum" label) uses
+  darker shades in light mode and lighter shades in dark mode; secondary hints like "Resets in" use higher contrast;
+  the daily-spend hint box adapts to the appearance instead of a fixed dark overlay; dropdowns and pickers are no
+  longer dimmed.
 - **No budget limit is no longer an error.** Instead of "No budget found", the popover shows your spend so far and
   explains that remaining budget and pacing require a limit. The menu bar tooltip reads "Used: … / No budget limit
   configured."
@@ -38,6 +52,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   "Spend / Tokens / Requests" control and shows a single chevron instead of two.
 - **VoiceOver:** without a budget limit, the menu bar item is announced as "Used …, no budget limit" instead of
   "No budget available".
+- **Fresh numbers when opening the popover:** if the data is older than 5 minutes, opening the popover refreshes it.
+  The regular refresh interval keeps the menu bar up to date in the background and now restarts after every
+  successful refresh, so "Next refresh in" stays accurate.
+- **Visible refresh:** while a refresh runs, a highlight sweeps across the menu bar pill and the "Refresh now" icon
+  in the popover footer is replaced by an animated loading icon.
 - **Softer red for "Likely to exceed":** the menu bar bar and budget card use a muted red instead of the bright system
   red.
 

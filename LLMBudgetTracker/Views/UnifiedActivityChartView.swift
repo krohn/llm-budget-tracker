@@ -57,7 +57,6 @@ struct UnifiedActivityChartView: View {
             .pickerStyle(.segmented)
             .controlSize(.small)
             .labelsHidden()
-            .opacity(0.85)
 
             Spacer(minLength: 8)
 
@@ -105,7 +104,6 @@ struct UnifiedActivityChartView: View {
             .menuStyle(.button)
             .menuIndicator(.hidden)
             .controlSize(.small)
-            .opacity(0.85)
             .fixedSize()
         }
     }
@@ -227,8 +225,8 @@ struct UnifiedActivityChartView: View {
                     .opacity(0.001)
                     .annotation(position: .top, alignment: .trailing) {
                         Text("Optimum")
-                            .font(.system(size: 8))
-                            .foregroundStyle(.green.opacity(0.85))
+                            .font(.caption2.weight(.medium))
+                            .foregroundStyle(PacingStatus.onTrack.textColor)
                             .padding(.trailing, 2)
                     }
                 }

@@ -6,7 +6,8 @@ final class ModelRangeTests: XCTestCase {
         XCTAssertEqual(ModelRange.thisWeek.label, "This week")
         XCTAssertEqual(ModelRange(rawValue: "thisWeek"), .thisWeek)
         XCTAssertEqual(ModelRange(rawValue: "thisMonth"), .thisMonth)
-        XCTAssertEqual(ModelRange(rawValue: "last28"), .last28)
+        XCTAssertEqual(ModelRange(rawValue: "lastMonth"), .lastMonth)
+        XCTAssertNil(ModelRange(rawValue: "last28"))
     }
 
     func testLastWeekIsAvailableInPicker() {
@@ -107,13 +108,19 @@ final class ModelRangeTests: XCTestCase {
         XCTAssertFalse(range.contains("2026-11-01"))
     }
 
-    func testLast28IncludesTodayAndPrevious27Days() throws {
-        let range = try dates(.last28, at: "2026-10-08T12:00:00Z")
-        XCTAssertEqual(range, "2026-09-11"..<"2026-10-09")
-        XCTAssertFalse(range.contains("2026-09-10"))
-        XCTAssertTrue(range.contains("2026-09-11"))
-        XCTAssertTrue(range.contains("2026-10-08"))
-        XCTAssertFalse(range.contains("2026-10-09"))
+    func testLastMonthIncludesOnlyPreviousCalendarMonth() throws {
+        let range = try dates(.lastMonth, at: "2026-10-08T12:00:00Z")
+        XCTAssertEqual(range, "2026-09-01"..<"2026-10-01")
+        XCTAssertFalse(range.contains("2026-08-31"))
+        XCTAssertTrue(range.contains("2026-09-30"))
+        XCTAssertFalse(range.contains("2026-10-01"))
+        XCTAssertEqual(ModelRange.lastMonth.label, "Last month")
+    }
+
+    func testYesterdayIncludesOnlyPreviousUTCDay() throws {
+        XCTAssertEqual(try dates(.yesterday, at: "2026-10-08T12:00:00Z"), "2026-10-07"..<"2026-10-08")
+        XCTAssertEqual(try dates(.yesterday, at: "2027-01-01T00:30:00+01:00"), "2026-12-30"..<"2026-12-31")
+        XCTAssertEqual(ModelRange.yesterday.label, "Yesterday")
     }
 
     func testThisMonthHandlesLeapYear() throws {
@@ -123,12 +130,12 @@ final class ModelRangeTests: XCTestCase {
         )
     }
 
-    func testLast28CrossesYearBoundary() throws {
-        XCTAssertEqual(try dates(.last28, at: "2027-01-01T12:00:00Z"), "2026-12-05"..<"2027-01-02")
+    func testLastMonthCrossesYearBoundary() throws {
+        XCTAssertEqual(try dates(.lastMonth, at: "2027-01-15T12:00:00Z"), "2026-12-01"..<"2027-01-01")
     }
 
-    func testLast28IncludesLeapDay() throws {
-        XCTAssertEqual(try dates(.last28, at: "2028-03-01T12:00:00Z"), "2028-02-03"..<"2028-03-02")
+    func testLastMonthIncludesLeapDay() throws {
+        XCTAssertEqual(try dates(.lastMonth, at: "2028-03-01T12:00:00Z"), "2028-02-01"..<"2028-03-01")
     }
 
     func testWeekRangesAreAdjacentAcrossDaylightSavingChange() throws {
@@ -141,7 +148,8 @@ final class ModelRangeTests: XCTestCase {
     }
 
     func testPickerOrderAndStableIdentifiers() throws {
-        XCTAssertEqual(ModelRange.allCases, [.thisMonth, .last28, .thisWeek, .lastWeek, .today])
+        XCTAssertEqual(ModelRange.allCases, [.today, .yesterday, .thisWeek, .lastWeek, .thisMonth, .lastMonth])
+        XCTAssertEqual(ModelRange.groups.flatMap { $0 }, ModelRange.allCases)
         for range in ModelRange.allCases {
             XCTAssertEqual(range.id, range.rawValue)
             XCTAssertEqual(try JSONDecoder().decode(ModelRange.self, from: JSONEncoder().encode(range)), range)

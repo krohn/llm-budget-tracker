@@ -61,6 +61,16 @@ jobs:
             CODE_SIGN_STYLE=Manual \
             ENABLE_HARDENED_RUNTIME=NO
 
+      - name: Run unit tests (no signing)
+        run: |
+          set -euo pipefail
+          xcodebuild test \
+            -project "${APP_NAME}.xcodeproj" \
+            -scheme "$SCHEME" \
+            -configuration Debug \
+            -destination "platform=macOS" \
+            CODE_SIGNING_ALLOWED=NO
+
   lint:
     name: Lint (SwiftLint)
     runs-on: macos-26

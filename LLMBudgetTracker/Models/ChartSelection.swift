@@ -17,21 +17,26 @@ enum MetricKind: String, CaseIterable, Codable, Identifiable {
 }
 
 enum ModelRange: String, CaseIterable, Codable, Identifiable {
-    case thisMonth
-    case last28
+    case today
+    case yesterday
     case thisWeek
     case lastWeek
-    case today
+    case thisMonth
+    case lastMonth
+
+    /// Menu sections, separated by dividers.
+    static let groups: [[Self]] = [[.today, .yesterday], [.thisWeek, .lastWeek], [.thisMonth, .lastMonth]]
 
     var id: String { rawValue }
 
     var label: String {
         switch self {
-        case .thisMonth: return "This month"
-        case .last28: return "Last 28 days"
+        case .today: return "Today"
+        case .yesterday: return "Yesterday"
         case .thisWeek: return "This week"
         case .lastWeek: return "Last week"
-        case .today: return "Today"
+        case .thisMonth: return "This month"
+        case .lastMonth: return "Last month"
         }
     }
 
@@ -48,9 +53,10 @@ enum ModelRange: String, CaseIterable, Codable, Identifiable {
             let interval = calendar.dateInterval(of: .month, for: today)
             start = interval?.start
             end = interval?.end
-        case .last28:
-            start = calendar.date(byAdding: .day, value: -27, to: today)
-            end = calendar.date(byAdding: .day, value: 1, to: today)
+        case .lastMonth:
+            let interval = calendar.dateInterval(of: .month, for: today)
+            end = interval?.start
+            start = end.flatMap { calendar.date(byAdding: .month, value: -1, to: $0) }
         case .thisWeek:
             let interval = calendar.dateInterval(of: .weekOfYear, for: today)
             start = interval?.start
@@ -62,6 +68,9 @@ enum ModelRange: String, CaseIterable, Codable, Identifiable {
         case .today:
             start = today
             end = calendar.date(byAdding: .day, value: 1, to: today)
+        case .yesterday:
+            start = calendar.date(byAdding: .day, value: -1, to: today)
+            end = today
         }
         guard let start, let end else { return nil }
 

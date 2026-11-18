@@ -6,7 +6,8 @@ struct ModelSpendBreakdownChartView: View {
     @AppStorage(StorageKeys.ChartUI.modelSpendRange) private var rangeRaw: String = ModelRange.thisMonth.rawValue
 
     private enum Layout {
-        static let rowHeight: CGFloat = 26
+        static let rowHeight: CGFloat = 32
+        static let barHeight: CGFloat = 12
         static let compactThreshold = 5
         static let axisOverhead: CGFloat = 28
         static let compactHeight: CGFloat = 180
@@ -29,18 +30,37 @@ struct ModelSpendBreakdownChartView: View {
     }
 
     private var rangePicker: some View {
-        Picker("Range", selection: Binding(
-            get: { range },
-            set: { rangeRaw = $0.rawValue }
-        )) {
-            ForEach(ModelRange.allCases) { opt in
-                Text(opt.label).tag(opt)
+        HStack {
+            Spacer()
+            Menu {
+                ForEach(Array(ModelRange.groups.enumerated()), id: \.offset) { index, group in
+                    if index > 0 {
+                        Divider()
+                    }
+                    ForEach(group) { opt in
+                        Button {
+                            rangeRaw = opt.rawValue
+                        } label: {
+                            if opt == range {
+                                Label(opt.label, systemImage: "checkmark")
+                            } else {
+                                Text(opt.label)
+                            }
+                        }
+                    }
+                }
+            } label: {
+                HStack(spacing: 4) {
+                    Text(range.label)
+                    Image(systemName: "chevron.down")
+                        .font(.caption2)
+                }
             }
+            .menuStyle(.button)
+            .menuIndicator(.hidden)
+            .controlSize(.small)
+            .fixedSize()
         }
-        .pickerStyle(.segmented)
-        .controlSize(.small)
-        .labelsHidden()
-        .opacity(0.85)
     }
 
     @ViewBuilder
@@ -66,10 +86,17 @@ struct ModelSpendBreakdownChartView: View {
         Chart(totals, id: \.model) { entry in
             BarMark(
                 x: .value("Spend", entry.spend),
-                y: .value("Model", entry.model)
+                y: .value("Model", entry.model),
+                height: .fixed(Layout.barHeight)
             )
             .foregroundStyle(Color.accentColor)
             .cornerRadius(2)
+            // Name directly above its bar instead of a band-centered axis label
+            .annotation(position: .top, alignment: .leading, spacing: 2) {
+                Text(entry.model)
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+            }
             .annotation(position: .trailing, alignment: .leading) {
                 Text(String(format: "$%.2f", entry.spend))
                     .font(.caption2)
@@ -87,12 +114,7 @@ struct ModelSpendBreakdownChartView: View {
                 }
             }
         }
-        .chartYAxis {
-            AxisMarks(position: .leading) { _ in
-                AxisValueLabel()
-                    .font(.caption2)
-            }
-        }
+        .chartYAxis(.hidden)
         .chartPlotStyle { plot in
             plot.padding(.trailing, 48)
         }

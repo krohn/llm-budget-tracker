@@ -39,14 +39,25 @@ extension BudgetViewModel {
                     seconds = retryDelay
                     retryDelay = min(retryDelay * 2, Self.maxRetrySeconds)
                 } else {
-                    seconds = Double(self?.updateIntervalMinutes ?? 60) * 60
+                    // Sleep until the next scheduled refresh, which moves forward
+                    // whenever an out-of-band refresh (e.g. popover open) succeeds.
+                    let interval = Double(self?.updateIntervalMinutes ?? 60) * 60
+                    seconds = max(1, self?.nextRefresh?.timeIntervalSinceNow ?? interval)
                     retryDelay = Self.baseRetrySeconds
                 }
                 try? await Task.sleep(for: .seconds(seconds))
                 if Task.isCancelled { break }
+                if self?.isInErrorState != true, let next = self?.nextRefresh, next > Date() { continue }
                 await self?.refresh()
             }
         }
+    }
+
+    /// Refreshes when the shown data is older than `maxAge`, so opening the popover
+    /// shows current numbers without a request on every click.
+    func refreshIfStale(maxAge: TimeInterval = 5 * 60) {
+        if let last = lastUpdated, Date().timeIntervalSince(last) < maxAge { return }
+        Task { await refresh() }
     }
 
     func restartTimer() {

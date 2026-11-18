@@ -151,7 +151,7 @@ struct PopoverView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text("More options")
                     .font(.caption2.weight(.semibold))
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(.secondary)
 
                 if !viewModel.dailyActivityEnabled {
                     dailyActivityHint
@@ -230,7 +230,7 @@ struct PopoverView: View {
                         }
                     }
                     .font(.caption2)
-                    .foregroundStyle(.tertiary)
+                    .foregroundStyle(.secondary)
                 }
             }
             HStack {
@@ -247,11 +247,21 @@ struct PopoverView: View {
                         isRefreshing = false
                     }
                 } label: {
-                    Label(isRefreshing ? "Refreshing..." : "Refresh now", systemImage: "arrow.clockwise")
+                    let loading = isRefreshing || viewModel.isLoading
+                    Label {
+                        Text(loading ? "Refreshing..." : "Refresh now")
+                    } icon: {
+                        if loading {
+                            Image(systemName: "progress.indicator")
+                                .symbolEffect(.variableColor.iterative, options: .repeat(.continuous))
+                        } else {
+                            Image(systemName: "arrow.clockwise")
+                        }
+                    }
                 }
                 .buttonStyle(.plain)
                 .font(.caption)
-                .disabled(isRefreshing)
+                .disabled(isRefreshing || viewModel.isLoading)
             }
         }
         .padding(.horizontal, 16)

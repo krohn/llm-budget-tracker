@@ -119,14 +119,13 @@ struct BudgetCard: View {
     let info: BudgetInfo
     let pacing: PacingInfo?
 
-    private var statusColor: Color {
-        pacing?.status.color ?? fallbackStatusColor
+    private var status: PacingStatus {
+        if let pacing { return pacing.status }
+        let pct = info.maxBudget.map { info.spend / $0 } ?? 0
+        return pct > 0.9 ? .overPace : pct > 0.75 ? .nearLimit : .onTrack
     }
 
-    private var fallbackStatusColor: Color {
-        let pct = info.maxBudget.map { info.spend / $0 } ?? 0
-        return pct > 0.9 ? PacingStatus.overPace.color : pct > 0.75 ? .orange : .green
-    }
+    private var statusColor: Color { status.color }
 
     private var remainingBudget: Double? {
         guard let maxBudget = info.maxBudget else { return nil }
@@ -165,7 +164,7 @@ struct BudgetCard: View {
                         if let remaining = remainingBudget {
                             Text(currency(remaining))
                                 .font(.system(size: 42, weight: .heavy, design: .rounded))
-                                .foregroundStyle(statusColor)
+                                .foregroundStyle(status.textColor)
                                 .accessibilityLabel(heroAccessibilityLabel(remaining: remaining))
                         } else {
                             Text(currency(info.spend))
@@ -177,7 +176,7 @@ struct BudgetCard: View {
                         if let resetText {
                             Text(resetText)
                                 .font(.caption2)
-                                .foregroundStyle(.tertiary)
+                                .foregroundStyle(.secondary)
                         }
                     }
 
@@ -188,13 +187,14 @@ struct BudgetCard: View {
                             StatusPill(
                                 icon: pacing.status.icon,
                                 text: pacing.status.label,
-                                color: statusColor
+                                color: statusColor,
+                                textColor: status.textColor
                             )
                         }
                     } else if let resetText {
                         Text(resetText)
                             .font(.caption2)
-                            .foregroundStyle(.tertiary)
+                            .foregroundStyle(.secondary)
                     }
                 }
             }
@@ -202,7 +202,7 @@ struct BudgetCard: View {
             if let pacing {
                 BudgetBar(pacing: pacing, statusColor: statusColor)
 
-                ActionInsightCard(pacing: pacing, color: statusColor)
+                ActionInsightCard(pacing: pacing, color: status.textColor)
             } else if let forecastText = fallbackForecastText {
                 Text(forecastText)
                     .font(.caption)
@@ -408,6 +408,7 @@ struct StatusPill: View {
     let icon: String
     let text: String
     let color: Color
+    let textColor: Color
 
     var body: some View {
         HStack(spacing: 6) {
@@ -416,10 +417,10 @@ struct StatusPill: View {
             Text(text)
                 .font(.caption.weight(.semibold))
         }
-        .foregroundStyle(color)
+        .foregroundStyle(textColor)
         .padding(.horizontal, 10)
         .padding(.vertical, 5)
-        .background(Capsule().fill(color.opacity(0.14)))
+        .background(Capsule().fill(color.opacity(0.16)))
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(text)
     }
@@ -449,7 +450,7 @@ struct ActionInsightCard: View {
         .padding(10)
         .background(
             RoundedRectangle(cornerRadius: 10)
-                .fill(.black.opacity(0.18))
+                .fill(Color(nsColor: .controlBackgroundColor).opacity(0.7))
         )
     }
 }
