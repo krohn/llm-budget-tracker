@@ -37,6 +37,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 #### Changed
 
+- **New bundle ID `io.krohn.llm-budget-tracker`** (was `com.ilja82.llm-budget-tracker`). macOS treats it as a new app:
+  settings, the API key in the Keychain and `Launch at Login` from the old app are not carried over, so set them up
+  again.
 - **Range dropdown:** the per-model spend breakdown picks its range from a dropdown (like "All Models") instead of
   segmented tabs, grouped into days, weeks and months.
 - **Menu bar pill:** dark capsule with an inner segment tinted in the pacing color; the solid part shows the budget

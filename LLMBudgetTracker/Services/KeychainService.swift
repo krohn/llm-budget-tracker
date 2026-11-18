@@ -2,7 +2,7 @@ import Foundation
 import Security
 
 enum AppKeychain {
-    static let service = "com.ilja82.llm-budget-tracker"
+    static let service = "io.krohn.llm-budget-tracker"
 }
 
 enum KeychainService {

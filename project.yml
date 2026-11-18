@@ -1,6 +1,6 @@
 name: LLMBudgetTracker
 options:
-  bundleIdPrefix: com.ilja82
+  bundleIdPrefix: io.krohn
   deploymentTarget:
     macOS: "26.0"
   xcodeVersion: "26.5"
@@ -20,7 +20,7 @@ targets:
       - LLMBudgetTracker/PrivacyInfo.xcprivacy
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.ilja82.llm-budget-tracker
+        PRODUCT_BUNDLE_IDENTIFIER: io.krohn.llm-budget-tracker
         SWIFT_VERSION: "6.0"
         MACOSX_DEPLOYMENT_TARGET: "26.0"
         CODE_SIGN_ENTITLEMENTS: LLMBudgetTracker/LLMBudgetTracker.entitlements
@@ -29,12 +29,12 @@ targets:
         INFOPLIST_KEY_NSHumanReadableDescription: "LLM Budget Tracker"
         INFOPLIST_KEY_CFBundleDisplayName: LLM Budget Tracker
         MARKETING_VERSION: "0.1.0"
-        CURRENT_PROJECT_VERSION: "12"
+        CURRENT_PROJECT_VERSION: "13"
         CODE_SIGN_STYLE: Automatic
         ENABLE_HARDENED_RUNTIME: YES
       configs:
         Debug:
-          PRODUCT_BUNDLE_IDENTIFIER: com.ilja82.llm-budget-tracker.debug
+          PRODUCT_BUNDLE_IDENTIFIER: io.krohn.llm-budget-tracker.debug
           INFOPLIST_KEY_CFBundleDisplayName: LLM Budget Tracker (Debug)
 
   LLMBudgetTrackerTests:
