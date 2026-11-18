@@ -52,5 +52,4 @@ release:
   interruptible: false
   script:
     - command -v xcodegen || brew install xcodegen
-    - command -v swiftlint || brew install swiftlint
     - ./scripts/publish-release.sh

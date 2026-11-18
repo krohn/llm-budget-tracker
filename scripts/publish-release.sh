@@ -17,11 +17,20 @@ if [ "$VERSION" != "$PROJECT_VERSION" ]; then
   exit 1
 fi
 
-./scripts/build-app.sh Release
+# Lint and tests run in the earlier CI stages
+DERIVED_DATA_DIR="build/DerivedData"
+rm -rf build dist
+mkdir -p dist
+xcodegen generate
+xcodebuild build \
+  -scheme "$APP_NAME" \
+  -configuration Release \
+  -destination 'platform=macOS' \
+  -derivedDataPath "$DERIVED_DATA_DIR"
 
 # DMG with the app and a link to /Applications
 STAGING=$(mktemp -d)
-ditto "dist/${APP_NAME}.app" "$STAGING/${APP_NAME}.app"
+ditto "$DERIVED_DATA_DIR/Build/Products/Release/${APP_NAME}.app" "$STAGING/${APP_NAME}.app"
 ln -s /Applications "$STAGING/Applications"
 hdiutil create -volname "LLM Budget Tracker ${VERSION}" -srcfolder "$STAGING" -format UDZO -ov "dist/$DMG"
 rm -rf "$STAGING"

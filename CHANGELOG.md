@@ -89,9 +89,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **GitLab CI (`.gitlab-ci.yml`)** with a `lint` job (`swiftlint lint --strict`) and a `test` job (`xcodegen generate`,
   then `xcodebuild test` without code signing). It runs on pushes and merge requests on a macOS shell runner tagged
   `macos`.
-- **Release job:** pushing a tag `vX.Y.Z` runs `scripts/publish-release.sh` in CI. It builds the app, packages it as a
-  DMG, uploads it to the generic package registry and creates a GitLab release with the version's CHANGELOG section as
-  notes. The tag must match `MARKETING_VERSION` in `project.yml`.
+- **Release job:** pushing a tag `vX.Y.Z` runs `scripts/publish-release.sh` in CI after lint and tests. It builds the
+  app, packages it as a DMG, uploads it to the generic package registry and creates a GitLab release with the version's
+  CHANGELOG section as notes. The tag must match `MARKETING_VERSION` in `project.yml`.
 
 #### Changed
 
