@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-11-18
+
 ### Highlights
 
 - The effective budget limit is now resolved across key, team member, team and user levels; the lowest limit wins.
@@ -79,6 +81,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   used for testing, whether a key is saved).
 - **`limits_found`** field in the Developer Mode request log, listing every limit that was found,
   e.g. `/key/info: $25.00, /v2/user/info: $100.00`.
+- **GitLab CI (`.gitlab-ci.yml`)** with a `lint` job (`swiftlint lint --strict`) and a `test` job (`xcodegen generate`,
+  then `xcodebuild test` without code signing). It runs on pushes and merge requests on a macOS shell runner tagged
+  `macos`.
 
 #### Changed
 
@@ -102,5 +107,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **`EndpointSecurity`:** the loopback allow list contains `[::1]` (the host as reported by `URLComponents`), and
   empty hosts are rejected.
 - **SwiftLint** now also lints `LLMBudgetTrackerTests`.
+- **Repository moved** to `git.krohn.io/karsten/llm-budget-tracker`.
 
-[Unreleased]: https://github.com/ilja82/llm-budget-tracker/compare/v0.0.8...HEAD
+#### Removed
+
+- **GitHub Actions workflows** (build, PR checks, CodeQL) and the Dependabot config. Releases are no longer built
+  automatically; `scripts/release.sh` only creates and pushes the version tag.
+- **Homebrew install** from `ilja82/tap`; that cask ships the upstream app without these changes.
+
+[Unreleased]: https://git.krohn.io/karsten/llm-budget-tracker/-/compare/v0.1.0...main
+[0.1.0]: https://git.krohn.io/karsten/llm-budget-tracker/-/compare/v0.0.8...v0.1.0

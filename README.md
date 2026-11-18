@@ -24,11 +24,7 @@ LiteLLM proxy and displays daily activity charts.
 
 ## Install the app
 
-Use homebrew to install the app:
-
-```bash
-brew install --cask ilja82/tap/llm-budget-tracker
-```
+There is no prebuilt release of this version yet. Build the app from source, see [Build from source](#build-from-source).
 
 ## Run the app
 
@@ -53,7 +49,7 @@ A full Xcode installation is required (not just the Command Line Tools).
 
 ```bash
 # 1. Clone
-git clone https://github.com/ilja82/llm-budget-tracker.git
+git clone https://git.krohn.io/karsten/llm-budget-tracker.git
 cd llm-budget-tracker
 
 # 2. Install XcodeGen and additional tools (if not already installed)
@@ -78,6 +74,9 @@ xcodegen generate
 DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer xcodebuild \
   -scheme LLMBudgetTracker -destination 'platform=macOS' test CODE_SIGNING_ALLOWED=NO
 ```
+
+GitLab CI (`.gitlab-ci.yml`) runs SwiftLint and the unit tests on every push and merge request. The jobs need a macOS
+shell runner with Xcode, tagged `macos`.
 
 ## License
 
