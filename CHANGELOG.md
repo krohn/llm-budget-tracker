@@ -5,6 +5,21 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### For users
+
+#### Added
+
+- **Homebrew:** install and upgrade the app with `brew install --cask llm-budget-tracker` from the tap in this
+  repository, see the README.
+
+### For developers
+
+#### Added
+
+- **`Casks/llm-budget-tracker.rb`:** Homebrew cask pointing at the versioned DMG in the package registry. The
+  `release` CI job updates its version and sha256 and pushes the change to `main`; it needs the masked CI variable
+  `CASK_PUSH_TOKEN` (project access token, role Maintainer, scope `write_repository`).
+
 ## [0.1.1] - 2026-11-18
 
 ### For users

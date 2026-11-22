@@ -7,6 +7,7 @@ set -euo pipefail
 APP_NAME="LLMBudgetTracker"
 PACKAGE_NAME="llm-budget-tracker"
 TAG="${CI_COMMIT_TAG:?must run in a tag pipeline}"
+: "${CASK_PUSH_TOKEN:?CI variable CASK_PUSH_TOKEN (project access token with write_repository) is missing}"
 VERSION="${TAG#v}"
 DMG="${APP_NAME}-${VERSION}.dmg"
 
@@ -72,3 +73,15 @@ print(json.dumps({
   "${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/releases" > /dev/null
 
 echo "Published $TAG: ${CI_PROJECT_URL}/-/releases/${TAG}"
+
+# Homebrew cask on main: new version and DMG checksum
+SHA256=$(shasum -a 256 "dist/$DMG" | cut -d ' ' -f 1)
+CASK="Casks/llm-budget-tracker.rb"
+git fetch --quiet origin main
+git checkout --quiet -B main FETCH_HEAD
+sed -i '' -e "s/^  version \".*\"/  version \"${VERSION}\"/" -e "s/^  sha256 \".*\"/  sha256 \"${SHA256}\"/" "$CASK"
+git -c user.name="GitLab CI" -c user.email="noreply@${CI_SERVER_HOST}" \
+  commit --quiet -m "Update the Homebrew cask to ${VERSION} [skip ci]" "$CASK"
+git push --quiet "https://oauth2:${CASK_PUSH_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git" main
+
+echo "Updated $CASK to $VERSION"

@@ -28,7 +28,22 @@ LiteLLM proxy and displays daily activity charts.
 
 ## Install the app
 
-Download the DMG of the latest version from the
+With [Homebrew](https://brew.sh):
+
+```bash
+brew tap karsten/llm-budget-tracker https://git.krohn.io/karsten/llm-budget-tracker.git
+brew trust karsten/llm-budget-tracker
+brew install --cask llm-budget-tracker
+```
+
+The app is not in Homebrew's own catalog; this repository is its own tap. `brew tap` adds the repository as a source
+for casks under the name `karsten/llm-budget-tracker`. Homebrew only loads casks from third-party taps you have
+trusted, so `brew trust` allows this one. `brew install --cask` then downloads the DMG of the latest release, checks
+its checksum and copies `LLMBudgetTracker.app` into `/Applications`. Tapping and trusting are needed only once.
+
+`brew upgrade --cask llm-budget-tracker` installs new versions.
+
+Or download the DMG of the latest version from the
 [releases page](https://git.krohn.io/karsten/llm-budget-tracker/-/releases), open it and drag `LLMBudgetTracker.app`
 into `Applications`.
 
@@ -97,7 +112,9 @@ shell runner with Xcode, tagged `macos`.
 
 Bump `MARKETING_VERSION` in `project.yml`, add the version's section to `CHANGELOG.md`, then run
 `./scripts/release.sh` on `main`. It pushes the tag `vX.Y.Z`; the `release` CI job then builds the app, packages it as
-a DMG, uploads it to the package registry and creates the GitLab release with the version's CHANGELOG section as notes.
+a DMG, uploads it to the package registry, creates the GitLab release with the version's CHANGELOG section as notes
+and pushes the new version and sha256 of the Homebrew cask (`Casks/llm-budget-tracker.rb`) to `main`. The push needs
+the masked CI variable `CASK_PUSH_TOKEN`: a project access token with role Maintainer and scope `write_repository`.
 
 ## License
 
