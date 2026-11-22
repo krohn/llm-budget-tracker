@@ -116,6 +116,11 @@ a DMG, uploads it to the package registry, creates the GitLab release with the v
 and pushes the new version and sha256 of the Homebrew cask (`Casks/llm-budget-tracker.rb`) to `main`. The push needs
 the masked CI variable `CASK_PUSH_TOKEN`: a project access token with role Maintainer and scope `write_repository`.
 
+## Credits
+
+This project is a fork of [ilja82/llm-budget-tracker](https://github.com/ilja82/llm-budget-tracker). Thanks to ilja82,
+who wrote the app and laid the groundwork that this version builds on.
+
 ## License
 
 Distributed under the MIT License. See [`LICENSE`](LICENSE) for more information.
