@@ -9,16 +9,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 #### Added
 
-- **Homebrew:** install and upgrade the app with `brew install --cask llm-budget-tracker` from the tap in this
-  repository, see the README.
+- **Homebrew:** install and upgrade the app with `brew install --cask llm-budget-tracker` from the tap `krohn/tap`
+  ([krohn/homebrew-tap](https://github.com/krohn/homebrew-tap)), see the README.
+- **GitHub releases:** each release is also published on
+  [GitHub](https://github.com/krohn/llm-budget-tracker/releases) with its DMG.
 
 ### For developers
 
 #### Added
 
-- **`Casks/llm-budget-tracker.rb`:** Homebrew cask pointing at the versioned DMG in the package registry. The
-  `release` CI job updates its version and sha256 and pushes the change to `main`; it needs the masked CI variable
-  `CASK_PUSH_TOKEN` (project access token, role Maintainer, scope `write_repository`).
+- **GitHub release and Homebrew cask:** the `release` CI job also creates the GitHub release with the DMG (via `gh`)
+  and updates version and sha256 of `Casks/llm-budget-tracker.rb` in `krohn/homebrew-tap`. It needs the masked,
+  protected CI variable `GITHUB_TOKEN` (fine-grained token, Contents: read and write on both repositories), protected
+  tags `v*` and a push mirror to GitHub.
 
 ## [0.1.1] - 2026-11-18
 

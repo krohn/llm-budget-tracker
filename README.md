@@ -31,20 +31,21 @@ LiteLLM proxy and displays daily activity charts.
 With [Homebrew](https://brew.sh):
 
 ```bash
-brew tap karsten/llm-budget-tracker https://git.krohn.io/karsten/llm-budget-tracker.git
-brew trust karsten/llm-budget-tracker
+brew tap krohn/tap
+brew trust krohn/tap
 brew install --cask llm-budget-tracker
 ```
 
-The app is not in Homebrew's own catalog; this repository is its own tap. `brew tap` adds the repository as a source
-for casks under the name `karsten/llm-budget-tracker`. Homebrew only loads casks from third-party taps you have
-trusted, so `brew trust` allows this one. `brew install --cask` then downloads the DMG of the latest release, checks
-its checksum and copies `LLMBudgetTracker.app` into `/Applications`. Tapping and trusting are needed only once.
+The app is not in Homebrew's own catalog; its cask lives in the tap [krohn/homebrew-tap](https://github.com/krohn/homebrew-tap).
+`brew tap` adds that repository as a source for casks under the name `krohn/tap`. Homebrew only loads casks from
+third-party taps you have trusted, so `brew trust` allows this one. `brew install --cask` then downloads the DMG of the
+latest GitHub release, checks its checksum and copies `LLMBudgetTracker.app` into `/Applications`. Tapping and
+trusting are needed only once.
 
 `brew upgrade --cask llm-budget-tracker` installs new versions.
 
 Or download the DMG of the latest version from the
-[releases page](https://git.krohn.io/karsten/llm-budget-tracker/-/releases), open it and drag `LLMBudgetTracker.app`
+[releases page](https://github.com/krohn/llm-budget-tracker/releases), open it and drag `LLMBudgetTracker.app`
 into `Applications`.
 
 The app is not notarized, so macOS blocks the first launch. Allow it once under System Settings → Privacy & Security →
@@ -112,9 +113,19 @@ shell runner with Xcode, tagged `macos`.
 
 Bump `MARKETING_VERSION` in `project.yml`, add the version's section to `CHANGELOG.md`, then run
 `./scripts/release.sh` on `main`. It pushes the tag `vX.Y.Z`; the `release` CI job then builds the app, packages it as
-a DMG, uploads it to the package registry, creates the GitLab release with the version's CHANGELOG section as notes
-and pushes the new version and sha256 of the Homebrew cask (`Casks/llm-budget-tracker.rb`) to `main`. The push needs
-the masked CI variable `CASK_PUSH_TOKEN`: a project access token with role Maintainer and scope `write_repository`.
+a DMG, uploads it to the package registry, creates the GitLab release and the GitHub release
+([krohn/llm-budget-tracker](https://github.com/krohn/llm-budget-tracker)), both with the version's CHANGELOG section as
+notes and the DMG attached, and pushes the new version and sha256 of the cask `Casks/llm-budget-tracker.rb` to the tap
+[krohn/homebrew-tap](https://github.com/krohn/homebrew-tap).
+
+This needs:
+
+- The masked, protected CI variable `GITHUB_TOKEN`: a fine-grained GitHub token for `krohn/llm-budget-tracker` and
+  `krohn/homebrew-tap` with the permission Contents: read and write.
+- Protected tags `v*`, so that tag pipelines can read the protected variable.
+- A push mirror from GitLab to `https://github.com/krohn/llm-budget-tracker.git`, so that the tagged commit exists on
+  GitHub.
+- `gh` on the runner; the job installs it with Homebrew if it is missing.
 
 ## Credits
 

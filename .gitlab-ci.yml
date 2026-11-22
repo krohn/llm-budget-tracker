@@ -52,4 +52,5 @@ release:
   interruptible: false
   script:
     - command -v xcodegen || brew install xcodegen
+    - command -v gh || brew install gh
     - ./scripts/publish-release.sh

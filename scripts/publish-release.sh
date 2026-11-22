@@ -1,13 +1,17 @@
 #!/bin/bash
 set -euo pipefail
 
-# Builds the app, packages it as a DMG and publishes it as a GitLab release.
+# Builds the app, packages it as a DMG and publishes it as a GitLab and a GitHub release.
+# Then updates the cask in the Homebrew tap on GitHub.
 # Runs in GitLab CI for version tags (vX.Y.Z).
 
 APP_NAME="LLMBudgetTracker"
 PACKAGE_NAME="llm-budget-tracker"
+GITHUB_REPO="krohn/llm-budget-tracker"
+TAP_REPO="krohn/homebrew-tap"
 TAG="${CI_COMMIT_TAG:?must run in a tag pipeline}"
-: "${CASK_PUSH_TOKEN:?CI variable CASK_PUSH_TOKEN (project access token with write_repository) is missing}"
+# Fine-grained token with Contents: read and write on $GITHUB_REPO and $TAP_REPO; gh reads GH_TOKEN
+export GH_TOKEN="${GITHUB_TOKEN:?CI variable GITHUB_TOKEN (GitHub token with Contents: write) is missing}"
 VERSION="${TAG#v}"
 DMG="${APP_NAME}-${VERSION}.dmg"
 
@@ -74,14 +78,25 @@ print(json.dumps({
 
 echo "Published $TAG: ${CI_PROJECT_URL}/-/releases/${TAG}"
 
-# Homebrew cask on main: new version and DMG checksum
-SHA256=$(shasum -a 256 "dist/$DMG" | cut -d ' ' -f 1)
-CASK="Casks/llm-budget-tracker.rb"
-git fetch --quiet origin main
-git checkout --quiet -B main FETCH_HEAD
-sed -i '' -e "s/^  version \".*\"/  version \"${VERSION}\"/" -e "s/^  sha256 \".*\"/  sha256 \"${SHA256}\"/" "$CASK"
-git -c user.name="GitLab CI" -c user.email="noreply@${CI_SERVER_HOST}" \
-  commit --quiet -m "Update the Homebrew cask to ${VERSION} [skip ci]" "$CASK"
-git push --quiet "https://oauth2:${CASK_PUSH_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git" main
+# GitHub release with the DMG. The push mirror has main there already; if it has not
+# mirrored the tag yet, GitHub creates it on the same commit.
+gh release create "$TAG" "dist/$DMG" \
+  --repo "$GITHUB_REPO" \
+  --target "$CI_COMMIT_SHA" \
+  --title "$TAG" \
+  --notes "$RELEASE_NOTES"
 
-echo "Updated $CASK to $VERSION"
+echo "Published $TAG: https://github.com/${GITHUB_REPO}/releases/tag/${TAG}"
+
+# Homebrew cask in the tap: new version and DMG checksum
+SHA256=$(shasum -a 256 "dist/$DMG" | cut -d ' ' -f 1)
+CASK="Casks/${PACKAGE_NAME}.rb"
+TAP_DIR=$(mktemp -d)
+git clone --quiet --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/${TAP_REPO}.git" "$TAP_DIR"
+sed -i '' -e "s/^  version \".*\"/  version \"${VERSION}\"/" -e "s/^  sha256 \".*\"/  sha256 \"${SHA256}\"/" "$TAP_DIR/$CASK"
+git -C "$TAP_DIR" -c user.name="GitLab CI" -c user.email="noreply@${CI_SERVER_HOST}" \
+  commit --quiet -m "Update ${PACKAGE_NAME} to ${VERSION}" "$CASK"
+git -C "$TAP_DIR" push --quiet origin HEAD
+rm -rf "$TAP_DIR"
+
+echo "Updated $CASK in $TAP_REPO to $VERSION"
