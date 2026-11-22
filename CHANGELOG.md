@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.1.2] - 2026-11-22
+
 ### For users
 
 #### Added
@@ -166,6 +168,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   release job instead and are no longer signed with a Developer ID or notarized.
 - **Homebrew install** from `ilja82/tap`; that cask ships the upstream app without these changes.
 
-[Unreleased]: https://git.krohn.io/karsten/llm-budget-tracker/-/compare/v0.1.1...main
+[Unreleased]: https://git.krohn.io/karsten/llm-budget-tracker/-/compare/v0.1.2...main
+[0.1.2]: https://git.krohn.io/karsten/llm-budget-tracker/-/compare/v0.1.1...v0.1.2
 [0.1.1]: https://git.krohn.io/karsten/llm-budget-tracker/-/compare/v0.1.0...v0.1.1
 [0.1.0]: https://git.krohn.io/karsten/llm-budget-tracker/-/compare/v0.0.8...v0.1.0
