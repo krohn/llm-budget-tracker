@@ -22,7 +22,7 @@ final class UpdateCheckTests: XCTestCase {
     }
 
     func testNewerReleaseLinksToItsReleasePage() throws {
-        let url = try XCTUnwrap(URL(string: "https://git.krohn.io/karsten/llm-budget-tracker/-/releases/v0.2.0"))
+        let url = try XCTUnwrap(URL(string: "https://github.com/krohn/llm-budget-tracker/releases/tag/v0.2.0"))
         XCTAssertEqual(
             ReleaseFeed.status(latestTag: "v0.2.0", currentVersion: "0.1.0"),
             .updateAvailable(version: "0.2.0", url: url)
@@ -53,7 +53,7 @@ final class UpdateCheckTests: XCTestCase {
     }
 
     func testDecodesLatestReleaseResponse() throws {
-        let json = Data(#"{"name":"v0.1.0","tag_name":"v0.1.0","description":"notes","_links":{}}"#.utf8)
+        let json = Data(#"{"name":"v0.1.0","tag_name":"v0.1.0","body":"notes","html_url":"https://github.com/krohn/llm-budget-tracker/releases/tag/v0.1.0"}"#.utf8)
         XCTAssertEqual(try JSONDecoder().decode(LatestRelease.self, from: json).tagName, "v0.1.0")
     }
 }

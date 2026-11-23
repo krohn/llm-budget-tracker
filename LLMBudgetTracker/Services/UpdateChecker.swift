@@ -1,7 +1,7 @@
 import Foundation
 import Observation
 
-/// Checks git.krohn.io for a newer release, on demand and (if enabled) once a day.
+/// Checks GitHub for a newer release, on demand and (if enabled) once a day.
 @Observable
 @MainActor
 final class UpdateChecker {
@@ -38,7 +38,7 @@ final class UpdateChecker {
         status = .checking
         do {
             var request = URLRequest(url: url)
-            request.setValue("application/json", forHTTPHeaderField: "Accept")
+            request.setValue("application/vnd.github+json", forHTTPHeaderField: "Accept")
             let (data, response) = try await session.data(for: request)
             guard (response as? HTTPURLResponse)?.statusCode == 200 else {
                 throw URLError(.badServerResponse)

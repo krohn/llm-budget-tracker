@@ -25,7 +25,7 @@ struct AppVersion: Comparable, CustomStringConvertible {
     var description: String { "\(major).\(minor).\(patch)" }
 }
 
-/// The fields of `GET /projects/:id/releases/permalink/latest` the update check needs.
+/// The fields of GitHub's `GET /repos/:owner/:repo/releases/latest` the update check needs.
 struct LatestRelease: Decodable {
     let tagName: String
 
@@ -44,13 +44,13 @@ enum UpdateCheckStatus: Equatable {
 
 enum ReleaseFeed {
     static let latestReleaseURL = URL(
-        string: "https://git.krohn.io/api/v4/projects/karsten%2Fllm-budget-tracker/releases/permalink/latest"
+        string: "https://api.github.com/repos/krohn/llm-budget-tracker/releases/latest"
     )
     static let autoCheckInterval: TimeInterval = 24 * 60 * 60
 
-    /// Release page for a tag. Built from a fixed https base because the API returns `http` links.
+    /// Release page for a tag, built from a fixed https base rather than trusting a link from the response.
     static func releasePageURL(tag: String) -> URL? {
-        URL(string: "https://git.krohn.io/karsten/llm-budget-tracker/-/releases/\(tag)")
+        URL(string: "https://github.com/krohn/llm-budget-tracker/releases/tag/\(tag)")
     }
 
     static func isCheckDue(lastCheck: Date?, now: Date) -> Bool {

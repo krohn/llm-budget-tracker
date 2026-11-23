@@ -23,8 +23,8 @@ LiteLLM proxy and displays daily activity charts.
 - If no limit is found, the user data (spend) is shown.
 - Checks for a newer release, on demand via `Check Now` in Settings and, if `Check for updates daily` is on
   (default), at launch and once a day. A newer version is shown in Settings and in the popover footer, with a link to
-  its release page. The check asks the public GitLab API of git.krohn.io for the latest release tag; nothing else is
-  sent.
+  its release page. The check asks the public GitHub API for the latest release tag of
+  [krohn/llm-budget-tracker](https://github.com/krohn/llm-budget-tracker/releases); nothing else is sent.
 
 ## Install the app
 

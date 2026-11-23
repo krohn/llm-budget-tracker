@@ -220,7 +220,7 @@ struct SettingsView: View {
         @Bindable var checker = updateChecker
         return Section {
             Toggle("Check for updates daily", isOn: $checker.autoCheckEnabled)
-            Text("Looks for a newer release on git.krohn.io once a day.")
+            Text("Looks for a newer release on GitHub once a day.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
 

@@ -5,6 +5,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.1.3] - 2026-11-23
+
+### For users
+
+#### Changed
+
+- **Update check:** looks for new versions on [GitHub](https://github.com/krohn/llm-budget-tracker/releases) instead
+  of git.krohn.io, and links to the GitHub release page.
+
+### For developers
+
+#### Changed
+
+- **`ReleaseFeed`:** queries `https://api.github.com/repos/krohn/llm-budget-tracker/releases/latest` (anonymous,
+  `Accept: application/vnd.github+json`) and builds release page URLs as
+  `https://github.com/krohn/llm-budget-tracker/releases/tag/<tag>`.
+
 ## [0.1.2] - 2026-11-22
 
 ### For users
@@ -168,7 +185,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   release job instead and are no longer signed with a Developer ID or notarized.
 - **Homebrew install** from `ilja82/tap`; that cask ships the upstream app without these changes.
 
-[Unreleased]: https://git.krohn.io/karsten/llm-budget-tracker/-/compare/v0.1.2...main
+[Unreleased]: https://git.krohn.io/karsten/llm-budget-tracker/-/compare/v0.1.3...main
+[0.1.3]: https://git.krohn.io/karsten/llm-budget-tracker/-/compare/v0.1.2...v0.1.3
 [0.1.2]: https://git.krohn.io/karsten/llm-budget-tracker/-/compare/v0.1.1...v0.1.2
 [0.1.1]: https://git.krohn.io/karsten/llm-budget-tracker/-/compare/v0.1.0...v0.1.1
 [0.1.0]: https://git.krohn.io/karsten/llm-budget-tracker/-/compare/v0.0.8...v0.1.0
