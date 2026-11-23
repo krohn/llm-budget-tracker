@@ -12,7 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 #### Changed
 
 - **Update check:** looks for new versions on [GitHub](https://github.com/krohn/llm-budget-tracker/releases) instead
-  of git.krohn.io, and links to the GitHub release page.
+  of git._____.__, and links to the GitHub release page.
 
 ### For developers
 
@@ -65,7 +65,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 #### Changed
 
-- The project on git.krohn.io is now public, so the update check needs no token.
+- The project on git._____.__ is now public, so the update check needs no token.
 
 ## [0.1.0] - 2026-11-18
 
@@ -82,7 +82,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 #### Added
 
-- **DMG download** on the [releases page](https://git.krohn.io/karsten/llm-budget-tracker/-/releases). The app is not
+- **DMG download** on the [releases page](https://git._____.__/karsten/llm-budget-tracker/-/releases). The app is not
   notarized; allow the first launch under System Settings → Privacy & Security → `Open Anyway`.
 - **Quit App** button next to "Settings" in the popover header.
 - **"This week" and "Last week"** ranges in the per-model spend breakdown. Weeks always run Monday to Sunday,
@@ -177,7 +177,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **`EndpointSecurity`:** the loopback allow list contains `[::1]` (the host as reported by `URLComponents`), and
   empty hosts are rejected.
 - **SwiftLint** now also lints `LLMBudgetTrackerTests`.
-- **Repository moved** to `git.krohn.io/karsten/llm-budget-tracker`.
+- **Repository moved** to `git._____.__/karsten/llm-budget-tracker`.
 
 #### Removed
 
@@ -185,8 +185,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   release job instead and are no longer signed with a Developer ID or notarized.
 - **Homebrew install** from `ilja82/tap`; that cask ships the upstream app without these changes.
 
-[Unreleased]: https://git.krohn.io/karsten/llm-budget-tracker/-/compare/v0.1.3...main
-[0.1.3]: https://git.krohn.io/karsten/llm-budget-tracker/-/compare/v0.1.2...v0.1.3
-[0.1.2]: https://git.krohn.io/karsten/llm-budget-tracker/-/compare/v0.1.1...v0.1.2
-[0.1.1]: https://git.krohn.io/karsten/llm-budget-tracker/-/compare/v0.1.0...v0.1.1
-[0.1.0]: https://git.krohn.io/karsten/llm-budget-tracker/-/compare/v0.0.8...v0.1.0
+[Unreleased]: https://git._____.__/karsten/llm-budget-tracker/-/compare/v0.1.3...main
+[0.1.3]: https://git._____.__/karsten/llm-budget-tracker/-/compare/v0.1.2...v0.1.3
+[0.1.2]: https://git._____.__/karsten/llm-budget-tracker/-/compare/v0.1.1...v0.1.2
+[0.1.1]: https://git._____.__/karsten/llm-budget-tracker/-/compare/v0.1.0...v0.1.1
+[0.1.0]: https://git._____.__/karsten/llm-budget-tracker/-/compare/v0.0.8...v0.1.0

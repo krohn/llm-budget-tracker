@@ -80,7 +80,7 @@ A full Xcode installation is required (not just the Command Line Tools).
 
 ```bash
 # 1. Clone
-git clone https://git.krohn.io/karsten/llm-budget-tracker.git
+git clone https://github.com/krohn/llm-budget-tracker.git
 cd llm-budget-tracker
 
 # 2. Install XcodeGen and additional tools (if not already installed)
